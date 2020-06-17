@@ -8,6 +8,12 @@ const colorOptions = document.getElementById('color');                  // grab 
 const colorOptionElements = document.querySelectorAll('#color option'); // grab all color options
 const colorLabel = document.querySelector('label[for="color"]');        // grab color label
 colorLabel.textContent = 'Please select a T-shirt theme';               // change color label
+const activitiesField = document.querySelector('.activities');  // grab acivities field
+const totalCost = document.createElement('h3');  // create h3
+activitiesField.appendChild(totalCost); // append total cost to activities field
+let total = 0; // set total to zero
+totalCost.textContent = `Total: $${total}`; // fill total cost text
+
 
 
 // ========== INITIAL STATES ========== //
@@ -70,3 +76,18 @@ window.addEventListener('change', (e) => {                     // add change lis
     }
   }
 });
+
+window.addEventListener('change', (e) => {
+  let target = e.target;
+  const dataCostValue = parseInt(target.getAttribute('data-cost'));
+
+  if (target.checked) {
+    total += dataCostValue;
+    console.log(total);
+  } else {
+    total -= dataCostValue;
+    console.log(total);
+  }
+
+  totalCost.textContent = `Total: $${total}`;
+})
