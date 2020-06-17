@@ -3,14 +3,14 @@ const nameField = document.getElementById('name');                      // grab 
 const titleField = document.getElementById('title');                    // grab title select field
 const otherTitleLabel = document.getElementById('other-label');         // grab other label
 const otherTitleField = document.getElementById('other-title');         // grab other title field
-const initialColorOption = document.createElement('option');            // create initial color option "Please select a
+const selectShirt = document.createElement('option');                   // create initial color option "Please select a
                                                                           // T-shirt theme"
 const colorOptions = document.getElementById('color');                  // grab color options
 const colorOptionElements = document.querySelectorAll('#color option'); // grab all color options
 
-const selectShirt = document.createElement('option');
-selectShirt.text = 'Please select a T-shirt theme';
-colorOptions.add(selectShirt, colorOptions[0]);
+
+selectShirt.text = 'Please select a T-shirt theme'; // set the text of new option
+colorOptions.add(selectShirt, colorOptions[0]);     // and new option to the beginning of option list
 
 
 // ========== INITIAL STATES ========== //
@@ -21,7 +21,7 @@ otherTitleField.style.display = 'none';  // hide other title field
 
 
 // ========== LOOPS ========== //
-for (i = 0; i < colorOptionElements.length; i++) {
+for (i = 0; i < colorOptionElements.length; i++) { // disable option list items
   colorOptionElements[i].disabled = true;
   //console.log(i);
 }
@@ -45,7 +45,3 @@ window.addEventListener('change', (e) => {    // add change listen to title sele
     }
   }
 });
-
-// 1. grab color options
-// 2. hide color options
-// 3. add "Please select a T-shirt theme"
