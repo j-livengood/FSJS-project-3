@@ -6,8 +6,8 @@ const otherTitleField = document.getElementById('other-title');         // grab 
 const themeOptions = document.getElementById('design');                  // grab color options
 const colorOptions = document.getElementById('color');                  // grab color options
 const colorOptionElements = document.querySelectorAll('#color option'); // grab all color options
-const colorLabel = document.querySelector('label[for="color"]');
-colorLabel.textContent = 'Please select a T-shirt theme';
+const colorLabel = document.querySelector('label[for="color"]');        // grab color label
+colorLabel.textContent = 'Please select a T-shirt theme';               // change color label
 
 
 // ========== INITIAL STATES ========== //
@@ -22,9 +22,9 @@ for (let i = 0; i < colorOptionElements.length; i++) { // disable option list it
   colorOptionElements[i].disabled = true;
 
   if (i <= 2) {
-    colorOptionElements[i].classList.add('puns');
+    colorOptionElements[i].classList.add('puns');      // add puns class
   } else {
-    colorOptionElements[i].classList.add('hearts');
+    colorOptionElements[i].classList.add('hearts');    // add hearts class
   }
 }
 
@@ -48,24 +48,24 @@ window.addEventListener('change', (e) => {    // add change listen to title sele
   }
 });
 
-window.addEventListener('change', (e) => {
-  let target = e.target;
-  const puns = document.getElementsByClassName('puns');
-  const hearts = document.getElementsByClassName('hearts');
-  colorLabel.textContent = 'Color:';
+window.addEventListener('change', (e) => {                     // add change listen to theme select field
+  let target = e.target;                                       // event target
+  const puns = document.getElementsByClassName('puns');        // grab puns
+  const hearts = document.getElementsByClassName('hearts');    // grab hearts
+  colorLabel.textContent = 'Color:';                           // change color label text
 
-  if (target === themeOptions) {
-    if (target.value === 'js puns') {
-      for (let i = 0; i < 3; i++) {
-        puns[i].disabled = false;
-        puns[i].style.display = '';
-        hearts[i].style.display = 'none';
+  if (target === themeOptions) {          // if target is theme menu
+    if (target.value === 'js puns') {     // if target value is js puns
+      for (let i = 0; i < 3; i++) {       // loop over arrays
+        puns[i].disabled = false;         // change puns disabled
+        puns[i].style.display = '';       // change puns display
+        hearts[i].style.display = 'none'; // change hearts display
       }
-    } else if (target.value === 'heart js') {
-      for (let i = 0; i < 3; i++) {
-        hearts[i].disabled = false;
-        hearts[i].style.display = '';
-        puns[i].style.display = 'none';
+    } else if (target.value === 'heart js') { // if target value is heart js
+      for (let i = 0; i < 3; i++) {           // loop over arrays
+        hearts[i].disabled = false;           // change hearts disabled
+        hearts[i].style.display = '';         // change hearts display
+        puns[i].style.display = 'none';       // change puns display
       }
     }
   }
