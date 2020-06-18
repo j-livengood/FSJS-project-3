@@ -1,18 +1,19 @@
 // ========== VARIABLES ========== //
-const nameField = document.getElementById('name');                      // grab name field
-const titleField = document.getElementById('title');                    // grab title select field
-const otherTitleLabel = document.getElementById('other-label');         // grab other label
-const otherTitleField = document.getElementById('other-title');         // grab other title field
-const themeOptions = document.getElementById('design');                  // grab color options
-const colorOptions = document.getElementById('color');                  // grab color options
-const colorOptionElements = document.querySelectorAll('#color option'); // grab all color options
-const colorLabel = document.querySelector('label[for="color"]');        // grab color label
-colorLabel.textContent = 'Please select a T-shirt theme';               // change color label
-const activitiesField = document.querySelector('.activities');  // grab acivities field
-const totalCost = document.createElement('h3');  // create h3
-activitiesField.appendChild(totalCost); // append total cost to activities field
-let total = 0; // set total to zero
-totalCost.textContent = `Total: $${total}`; // fill total cost text
+const nameField = document.getElementById('name');                        // grab name field
+const titleField = document.getElementById('title');                      // grab title select field
+const otherTitleLabel = document.getElementById('other-label');           // grab other label
+const otherTitleField = document.getElementById('other-title');           // grab other title field
+const themeOptions = document.getElementById('design');                   // grab color options
+const colorOptions = document.getElementById('color');                    // grab color options
+const colorOptionElements = document.querySelectorAll('#color option');   // grab all color options
+const colorLabel = document.querySelector('label[for="color"]');          // grab color label
+colorLabel.textContent = 'Please select a T-shirt theme';                 // change color label
+const activitiesField = document.querySelector('.activities');            // grab acivities field
+const activities = document.querySelectorAll('input[type = "checkbox"]'); //grab checkboxes
+const totalCost = document.createElement('h3');                           // create h3
+activitiesField.appendChild(totalCost);                                   // append total cost to activities field
+let total = 0;                                                            // set total to zero
+totalCost.textContent = `Total: $${total}`;                               // fill total cost text
 
 
 
@@ -55,39 +56,50 @@ window.addEventListener('change', (e) => {    // add change listen to title sele
 });
 
 window.addEventListener('change', (e) => {                     // add change listen to theme select field
-  let target = e.target;                                       // event target
+  const designSelect = e.target;                               // event target
   const puns = document.getElementsByClassName('puns');        // grab puns
   const hearts = document.getElementsByClassName('hearts');    // grab hearts
   colorLabel.textContent = 'Color:';                           // change color label text
 
-  if (target === themeOptions) {          // if target is theme menu
-    if (target.value === 'js puns') {     // if target value is js puns
-      for (let i = 0; i < 3; i++) {       // loop over arrays
-        puns[i].disabled = false;         // change puns disabled
-        puns[i].style.display = '';       // change puns display
-        hearts[i].style.display = 'none'; // change hearts display
+  if (designSelect === themeOptions) {       // if target is theme menu
+    if (designSelect.value === 'js puns') {  // if target value is js puns
+      for (let i = 0; i < 3; i++) {          // loop over arrays
+        puns[i].disabled = false;            // change puns disabled
+        puns[i].style.display = '';          // change puns display
+        hearts[i].style.display = 'none';    // change hearts display
       }
-    } else if (target.value === 'heart js') { // if target value is heart js
-      for (let i = 0; i < 3; i++) {           // loop over arrays
-        hearts[i].disabled = false;           // change hearts disabled
-        hearts[i].style.display = '';         // change hearts display
-        puns[i].style.display = 'none';       // change puns display
+    } else if (designSelect.value === 'heart js') { // if target value is heart js
+      for (let i = 0; i < 3; i++) {                 // loop over arrays
+        hearts[i].disabled = false;                 // change hearts disabled
+        hearts[i].style.display = '';               // change hearts display
+        puns[i].style.display = 'none';             // change puns display
       }
     }
   }
 });
 
-window.addEventListener('change', (e) => {
-  let target = e.target;
-  const dataCostValue = parseInt(target.getAttribute('data-cost'));
+window.addEventListener('change', (e) => {                                 // add change listen to checkboxes
+  const checkedTarget = e.target;                                          // event target
+  const dataCostValue = parseInt(checkedTarget.getAttribute('data-cost')); // grab target cost
+  const dayAndTime = checkedTarget.getAttribute('data-day-and-time');      // grab target time
 
-  if (target.checked) {
-    total += dataCostValue;
-    console.log(total);
-  } else {
-    total -= dataCostValue;
-    console.log(total);
+  if (checkedTarget.checked) { // if the target is checked
+    total += dataCostValue;    // add cost to toal
+  } else {                     // else
+    total -= dataCostValue;    // subtract cost from total
   }
 
-  totalCost.textContent = `Total: $${total}`;
+  for (let i = 0; i < activities.length; i++) {                                  // loop over checkboxes
+    const currentActivity = activities[i];                                       // grab current iteration
+    const currentActivityTime = activities[i].getAttribute('data-day-and-time'); // grab current time
+    
+    if (dayAndTime === currentActivityTime && checkedTarget !== currentActivity) { // are there matching times?
+      if (checkedTarget.checked) {                                                 // if yes, and one is checked
+        currentActivity.disabled = true;                                           // disable the other one
+      } else {                                                                     // else
+        currentActivity.disabled = false;                                          // enable the other one
+      }
+    }
+  }
+  totalCost.textContent = `Total: $${total}`; // update the text of the total
 })
