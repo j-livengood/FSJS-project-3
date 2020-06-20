@@ -170,6 +170,7 @@ const checkCreditCard = () => {                // check credit card number funct
     checkCcNumber();                           // check cc number
     checkZipCode();                            // check zip code
     checkCvv();                                // check cvv
+    return true;
   }
 }
 
@@ -334,9 +335,9 @@ form.addEventListener('submit', (e) => {                              // listen 
     e.preventDefault();                                               // prevent default submit behavior
     activitiesField.firstElementChild.style.display = 'inline-block'; // show alert
   };
-  if (!checkCreditCard()) {
-    e.preventDefault();
-  };
+  // if (!checkCreditCard()) {
+  //   e.preventDefault();
+  // };
 
   console.log('clicked');
   
