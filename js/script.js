@@ -1,10 +1,17 @@
+"use strict";
+
 // ========== VARIABLES ========== //
+const form = document.querySelector('form');                              // grab form
   // ----- Job Role Field ----- //
 const nameField = document.getElementById('name');                        // grab name field
+const nameLabel = document.querySelector('label[for="name"');             // grab name label
+const emailField = document.getElementById('mail');                       // grab email field
+const emailLabel = document.querySelector('label[for="mail"');            // grab email label
 const titleField = document.getElementById('title');                      // grab title select field
 const otherTitleLabel = document.getElementById('other-label');           // grab other label
 const otherTitleField = document.getElementById('other-title');           // grab other title field
   // ----- t-shirt field ----- //
+const shirtBox = document.querySelector('.shirt-box');                    // grab shirt div
 const themeOptions = document.getElementById('design');                   // grab color options
 const colorOptions = document.getElementById('color');                    // grab color options
 const colorOptionElements = document.querySelectorAll('#color option');   // grab all color options
@@ -12,17 +19,15 @@ const colorLabel = document.querySelector('label[for="color"]');          // gra
 colorLabel.textContent = 'Please select a T-shirt theme';                 // change color label
   // ----- activities field ----- //
 const activitiesField = document.querySelector('.activities');            // grab acivities field
-const activities = document.querySelectorAll('input[type = "checkbox"]'); //grab checkboxes
+const activities = document.querySelectorAll('input[type = "checkbox"]'); // grab checkboxes
 const totalCost = document.createElement('h3');                           // create h3
-
-
   // ----- payment field ----- //
 const paymentSelect = document.getElementById('payment');                 // grab payment select
 const paymentOptions = paymentSelect.children;                            // grab payment options
 const creditCard = document.getElementById('credit-card');                // grab credit card div
 const paypal = document.getElementById('paypal');                         // grab paypal div
 const bitcoin = document.getElementById('bitcoin');                       // grab bitcoin div
-
+const submit = document.querySelector('button[type = "submit"');          // grab submit button
 
 
 
@@ -57,6 +62,64 @@ for (let i = 0; i < colorOptionElements.length; i++) { // disable option list it
 
 
 // ========== FUNCTIONS ========== //
+// first function dynamically creates hidden alert messages
+  // text is text content - string
+  // color is text color - string
+  // display is display style - string
+  // _addTo is the node you're adding the message to - nodes are saved in variables at the top
+  // _location is one of the 4 options to give to insertAdjacentElement...'afterend', 'beforeend', etc.
+
+const createAlert = (text, color, display, _addTo, _location) => { // dynamic function creating hidden alert messages
+  const message = document.createElement('p');                     // create alert paragraph element
+  message.textContent = text;                                      // set text content
+  message.style.color = color;                                     // set text color
+  message.style.display = display;                                 // set text display
+  _addTo.insertAdjacentElement(_location, message);                // select node to add to, and location where to add
+}
+
+const checkName = () => {                               // check name function
+  const nameValue = nameField.value;                    // grab value in name input
+  if (nameValue.length > 0) {                           // if value is greater than 0
+    nameField.style.borderColor = 'rgb(111, 157, 220)'; // set border color to original state
+    return true;                                        // return true
+  } else {                                              // else
+    nameField.style.borderColor = 'red';                // set border color to red
+    return false;                                       // return false
+  }
+}
+
+const checkEmail = () => {                               // check email function
+  const emailValue = emailField.value;                   // grab value in email input
+  const atIndex = emailValue.indexOf('@');               // grab index of '@'
+  const dotIndex = emailValue.lastIndexOf('.');          // grab last index of '.'
+  if (atIndex > 1 && dotIndex > atIndex) {               // if index of '@' larger than 1 AND index of '.' greater than index of '@'
+    emailField.style.borderColor = 'rgb(111, 157, 220)'; // set border color to original state
+    return true;                                         // return true
+  } else {                                               // else
+    emailField.style.borderColor = 'red';                // set border color to red
+    return false;                                        // return false
+  }
+}
+
+const checkShirtTheme = () => {             // check shirt function
+  const themeValue = themeOptions.value;    // grab value of shirt them select
+  if (themeValue !== 'Select Theme') {      // if value is NOT 'Select Theme'
+    themeOptions.style.borderColor = '';    // remove border color
+    return true;                            // return true
+  } else {                                  // else
+    themeOptions.style.borderColor = 'red'; // set border color to red
+    return false;                           // return false
+  }
+}
+
+const checkActivities = () => {                 // check activities function
+  for (let i = 0; i < activities.length; i++) { // loop over activities checkboxes
+    if (activities[i].checked) {                // if one is checked
+      return true;                              // return true
+    }
+  }
+  return false;                                 // else, return false
+}
 
 
 
@@ -74,13 +137,16 @@ window.addEventListener('change', (e) => {    // add change listen to title sele
   }
 });
 
-window.addEventListener('change', (e) => {                     // add change listen to theme select field
-  const designSelect = e.target;                               // event target
-  const puns = document.getElementsByClassName('puns');        // grab puns
-  const hearts = document.getElementsByClassName('hearts');    // grab hearts
-  colorLabel.textContent = 'Color:';                           // change color label text
-
-  if (designSelect === themeOptions) {       // if target is theme menu
+window.addEventListener('change', (e) => {                    // add change listen to theme select field
+  const designSelect = e.target;                              // event target
+  const puns = document.getElementsByClassName('puns');       // grab puns
+  const hearts = document.getElementsByClassName('hearts');   // grab hearts
+  colorLabel.textContent = 'Color:';                          // change color label text
+  if (designSelect === themeOptions) {                        // if target is theme menu
+    if (designSelect.value !== 'Select Theme') {              // if value is NOT 'Select Theme'
+      shirtBox.previousElementSibling.style.display = 'none'; // hide alert
+      themeOptions.style.borderColor = '';                    // remove border color
+    }
     if (designSelect.value === 'js puns') {  // if target value is js puns
       for (let i = 0; i < 3; i++) {          // loop over arrays
         puns[i].disabled = false;            // change puns disabled
@@ -103,17 +169,15 @@ activitiesField.addEventListener('change', (e) => {                        // ad
   const checkedTarget = e.target;                                          // event target
   const dataCostValue = parseInt(checkedTarget.getAttribute('data-cost')); // grab target cost
   const dayAndTime = checkedTarget.getAttribute('data-day-and-time');      // grab target time
-  
-  if (checkedTarget.checked) { // if the target is checked
-    total += dataCostValue;    // add cost to toal
-  } else {                     // else
-    total -= dataCostValue;    // subtract cost from total
+  if (checkedTarget.checked) {                                             // if the target is checked
+    activitiesField.firstElementChild.style.display = 'none';              // change alert display
+    total += dataCostValue;                                                // add cost to toal
+  } else {                                                                 // else
+    total -= dataCostValue;                                                // subtract cost from total
   }
-
-  for (let i = 0; i < activities.length; i++) {                                  // loop over checkboxes
-    const currentActivity = activities[i];                                       // grab current iteration
-    const currentActivityTime = activities[i].getAttribute('data-day-and-time'); // grab current time
-    
+  for (let i = 0; i < activities.length; i++) {                                    // loop over checkboxes
+    const currentActivity = activities[i];                                         // grab current iteration
+    const currentActivityTime = activities[i].getAttribute('data-day-and-time');   // grab current time
     if (dayAndTime === currentActivityTime && checkedTarget !== currentActivity) { // are there matching times?
       if (checkedTarget.checked) {                                                 // if yes, and one is checked
         currentActivity.disabled = true;                                           // disable the other one
@@ -128,24 +192,71 @@ activitiesField.addEventListener('change', (e) => {                        // ad
 window.addEventListener('change', (e) => {  // add change listen to payment select field
   const paymentTarget = e.target;           // payment target
   const paymentValue = paymentTarget.value; // grab value to payment select
-
-  if (paymentTarget === paymentSelect) {   // if target is payment method select
-    switch (paymentValue) {                // switch depending on target value
-      case 'credit card':                  // case credit card
-        creditCard.style.display = '';     // show credit card
-        paypal.style.display = 'none';     // hide paypal
-        bitcoin.style.display = 'none';    // hide bitcoin
+  if (paymentTarget === paymentSelect) {    // if target is payment method select
+    switch (paymentValue) {                 // switch depending on target value
+      case 'credit card':                   // case credit card
+        creditCard.style.display = '';      // show credit card
+        paypal.style.display = 'none';      // hide paypal
+        bitcoin.style.display = 'none';     // hide bitcoin
         break;
-      case 'paypal':                       // case paypal
-        creditCard.style.display = 'none'; // hide credit card
-        paypal.style.display = '';         // show paypal
-        bitcoin.style.display = 'none';    // hide bitcoin
+      case 'paypal':                        // case paypal
+        creditCard.style.display = 'none';  // hide credit card
+        paypal.style.display = '';          // show paypal
+        bitcoin.style.display = 'none';     // hide bitcoin
         break;
-      case 'bitcoin':                      // case bitcoin
-        creditCard.style.display = 'none'; // hide credit card
-        paypal.style.display = 'none';     // hide paypal
-        bitcoin.style.display = '';        // show bitcoin
+      case 'bitcoin':                       // case bitcoin
+        creditCard.style.display = 'none';  // hide credit card
+        paypal.style.display = 'none';      // hide paypal
+        bitcoin.style.display = '';         // show bitcoin
         break;
     }
   }
 });
+
+['focusout', 'blur'].forEach(event => {                      // dynamically add focusout and blur even listeners
+  nameField.addEventListener(event, () => {                  // listen to name field
+    if (checkName()) {                                       // if checkName returns true
+      nameLabel.nextElementSibling.style.display = 'none';   // hide alert
+    } else {                                                 // else
+      nameLabel.nextElementSibling.style.display = 'inline'; // show alert
+    }
+  });
+  emailField.addEventListener(event, () => {                  // listen to email field
+    if (checkEmail()) {                                       // if checkEmail returns true
+      emailLabel.nextElementSibling.style.display = 'none';   // hide alert
+    } else {                                                  // else
+      emailLabel.nextElementSibling.style.display = 'inline'; // show alert
+    }
+  });
+})
+
+form.addEventListener('submit', (e) => {                              // listen for submit event
+  if (!checkName()) {                                                 // if checkName returns false
+    e.preventDefault();                                               // prevent default submit behavior
+    nameLabel.nextElementSibling.style.display = 'inline';            // show alert
+  };
+  if (!checkEmail()) {                                                // if checkEmail returns false
+    e.preventDefault();                                               // prevent default submit behavior
+    emailLabel.nextElementSibling.style.display = 'inline';           // show alert
+  };
+  if (!checkShirtTheme()) {                                           // if checkShirtTheme returns false
+    e.preventDefault();                                               // prevent default submit behavior
+    shirtBox.previousElementSibling.style.display = 'inline-block';   // show alert
+  };
+  if (!checkActivities()) {                                           // if checkActivities returns false
+    e.preventDefault();                                               // prevent default submit behavior
+    activitiesField.firstElementChild.style.display = 'inline-block'; // show alert
+  }
+  
+  // call validation functions on submit event
+  checkName();
+  checkEmail();
+  checkShirtTheme();
+  checkActivities();
+})
+
+// call dynamic createAlert function to add hidden alerts to page, passing in appropriate args for each
+createAlert('Please enter your name.', 'red', 'none', nameLabel, 'afterend');
+createAlert('Please enter a valid email.', 'red', 'none', emailLabel, 'afterend');
+createAlert('Please choose a T-shirt.', 'red', 'none', shirtBox, 'beforebegin');
+createAlert('Please choose your activities.', 'red', 'none', activitiesField.firstElementChild, 'beforebegin');
