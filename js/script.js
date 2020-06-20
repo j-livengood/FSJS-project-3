@@ -245,19 +245,19 @@ window.addEventListener('change', (e) => {  // add change listen to payment sele
         creditCard.style.display = '';      // show credit card
         paypal.style.display = 'none';      // hide paypal
         bitcoin.style.display = 'none';     // hide bitcoin
-        paymentSelect.previousElementSibling.style.display = 'none';
+        //paymentSelect.previousElementSibling.style.display = 'none';
         break;
       case 'paypal':                        // case paypal
         creditCard.style.display = 'none';  // hide credit card
         paypal.style.display = '';          // show paypal
         bitcoin.style.display = 'none';     // hide bitcoin
-        paymentSelect.previousElementSibling.style.display = 'none';
+        //paymentSelect.previousElementSibling.style.display = 'none';
         break;
       case 'bitcoin':                       // case bitcoin
         creditCard.style.display = 'none';  // hide credit card
         paypal.style.display = 'none';      // hide paypal
         bitcoin.style.display = '';         // show bitcoin
-        paymentSelect.previousElementSibling.style.display = 'none';
+        //paymentSelect.previousElementSibling.style.display = 'none';
         break;
     }
   }
@@ -311,7 +311,7 @@ createAlert('Please enter your name.', 'red', 'none', nameLabel, 'afterend');
 createAlert('Please enter a valid email.', 'red', 'none', emailLabel, 'afterend');
 createAlert('Please choose a T-shirt.', 'red', 'none', shirtBox, 'beforebegin');
 createAlert('Please choose your activities.', 'red', 'none', activitiesField.firstElementChild, 'beforebegin');
-createAlert('Please select a payment method.', 'red', 'none', paymentSelect, 'beforebegin');
+//createAlert('Please select a payment method.', 'red', 'none', paymentSelect, 'beforebegin');
 createAlert('Please enter a valid credit card number.', 'red', 'none', ccNumber, 'beforebegin');
 createAlert('Please enter a valid zip code.', 'red', 'none', zipCode, 'beforebegin');
 createAlert('Please enter a valid cvv.', 'red', 'none', cvv, 'beforebegin');
