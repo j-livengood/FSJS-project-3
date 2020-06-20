@@ -83,7 +83,7 @@ const createAlert = (text, color, display, _addTo, _location) => { // dynamic fu
 
 const checkName = () => {                               // check name function
   const nameValue = nameField.value;                    // grab value in name input
-  if (nameValue.length > 0) {                           // if value is greater than 0
+  if (nameValue.length >= 1) {                           // if value is greater than 0
     nameField.style.borderColor = 'rgb(111, 157, 220)'; // set border color to original state
     return true;                                        // return true
   } else {                                              // else
@@ -175,18 +175,46 @@ const checkCreditCard = () => {                // check credit card number funct
   }
 }
 
+const fadeIn = (el, _display) => {
+  let initOpacity = 0.1;
+  el.style.opacity = initOpacity;
+  el.style.display = _display;
+  let timer = setInterval(() => {
+    if (initOpacity >= 1) {
+      clearInterval(timer);
+    }
+    el.style.opacity = initOpacity;
+    el.style.filter = `alpha(opacity=${initOpacity} * 100)`;
+    initOpacity += initOpacity * 0.1;
+  }, 30);
+}
+
+const fadeOut = (el, _display) => {
+  let initOpacity = 1;  // initial opacity
+  el.style.opacity = initOpacity;
+    var timer = setInterval(() => {
+        if (initOpacity <= 0.1){
+            clearInterval(timer);
+            el.style.display = _display;
+        }
+        el.style.opacity = initOpacity;
+        el.style.filter = `alpha(opacity=${initOpacity} * 100`;
+        initOpacity -= initOpacity * 0.1;
+    }, 50);
+}
+
 
 
 // ========== EVENT LISTENERS ========== //
-window.addEventListener('change', (e) => {    // add change listen to title select field
-  const titleSelect = e.target;               // event target
-  if (titleSelect === titleField) {           // if the target is the title field
-    if (titleSelect.value === 'other') {      // and if the targets value is 'other'
-      otherTitleLabel.style.display = '';     // set other label display to show
-      otherTitleField.style.display = '';     // set other text field display to show
-    } else {                                  // else if the target value is NOT 'other'
-      otherTitleLabel.style.display = 'none'; // hide other label
-      otherTitleField.style.display = 'none'; // hide other text field
+titleField.addEventListener('change', (e) => { // add change listen to title select field
+  const titleSelect = e.target;                // event target
+  if (titleSelect === titleField) {            // if the target is the title field
+    if (titleSelect.value === 'other') {       // and if the targets value is 'other'
+      fadeIn(otherTitleLabel, '');             // set other label display to show
+      fadeIn(otherTitleField, '');             // set other text field display to show
+    } else {                                   // else if the target value is NOT 'other'
+      fadeOut(otherTitleLabel, 'none');        // hide other label
+      fadeOut(otherTitleField, 'none');        // hide other text field
     }
   }
 });
@@ -244,7 +272,7 @@ activitiesField.addEventListener('change', (e) => {                        // ad
   totalCost.textContent = `Total: $${total}`; // update the text of the total
 })
 
-window.addEventListener('change', (e) => {  // add change listen to payment select field
+paymentSelect.addEventListener('change', (e) => {  // add change listen to payment select field
   const paymentTarget = e.target;           // payment target
   const paymentValue = paymentTarget.value; // grab value to payment select
   if (paymentTarget === paymentSelect) {    // if target is payment method select
@@ -274,15 +302,18 @@ window.addEventListener('change', (e) => {  // add change listen to payment sele
 ['focusin', 'focusout', 'blur', 'keydown'].forEach(event => { // dynamically add focusout and blur even listeners
   nameField.addEventListener(event, () => {                   // listen to name field
     if (checkName()) {                                        // if checkName returns true
-      nameLabel.nextElementSibling.style.display = 'none';    // hide alert
+      fadeOut(nameLabel.nextElementSibling, 'none');
+      //nameLabel.nextElementSibling.style.display = 'none';    // hide alert
     } else {                                                  // else
-      nameLabel.nextElementSibling.style.display = 'inline';  // show alert
+      fadeIn(nameLabel.nextElementSibling, 'inline');
+      //nameLabel.nextElementSibling.style.display = 'inline';  // show alert
     }
   });
   emailField.addEventListener(event, () => {                  // listen to email field
     if (checkEmail()) {                                       // if checkEmail returns true
       emailLabel.nextElementSibling.style.display = 'none';   // hide alert
     } else {                                                  // else
+      fadeIn(emailLabel.nextElementSibling, 'inline');
       emailLabel.nextElementSibling.style.display = 'inline'; // show alert
     }
   });
