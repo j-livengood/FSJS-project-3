@@ -1,5 +1,3 @@
-"use strict";
-
 // ========== VARIABLES ========== //
 const form = document.querySelector('form');                              // grab form
   // ----- Job Role Field ----- //
@@ -275,15 +273,46 @@ window.addEventListener('change', (e) => {  // add change listen to payment sele
   nameField.addEventListener(event, () => {                   // listen to name field
     if (checkName()) {                                        // if checkName returns true
       nameLabel.nextElementSibling.style.display = 'none';    // hide alert
+      nameField.style.borderColor = 'rgb(111, 157, 220)';
     } else {                                                  // else
       nameLabel.nextElementSibling.style.display = 'inline';  // show alert
+      nameField.style.borderColor = 'red';
     }
   });
   emailField.addEventListener(event, () => {                  // listen to email field
     if (checkEmail()) {                                       // if checkEmail returns true
       emailLabel.nextElementSibling.style.display = 'none';   // hide alert
+      emailField.style.borderColor = 'rgb(111, 157, 220)';
     } else {                                                  // else
       emailLabel.nextElementSibling.style.display = 'inline'; // show alert
+      emailField.style.borderColor = 'red';
+    }
+  });
+  ccNumber.addEventListener(event, () => {
+    if (checkCcNumber()) {
+      ccNumber.previousElementSibling.style.display = 'none';
+      ccNumber.style.borderColor = 'rgb(111, 157, 220)';
+    } else {
+      ccNumber.previousElementSibling.style.display = 'inline';
+      ccNumber.style.borderColor = 'red';
+    }
+  });
+  zipCode.addEventListener(event, () => {
+    if (checkZipCode()) {
+      zipCode.previousElementSibling.style.display = 'none';
+      zipCode.style.borderColor = 'rgb(111, 157, 220)';
+    } else {
+      zipCode.previousElementSibling.style.display = 'inline';
+      zipCode.style.borderColor = 'red';
+    }
+  });
+  cvv.addEventListener(event, () => {
+    if (checkCvv()) {
+      cvv.previousElementSibling.style.display = 'none';
+      cvv.style.borderColor = 'rgb(111, 157, 220)';
+    } else {
+      cvv.previousElementSibling.style.display = 'inline';
+      cvv.style.borderColor = 'red';
     }
   });
 })
@@ -304,10 +333,12 @@ form.addEventListener('submit', (e) => {                              // listen 
   if (!checkActivities()) {                                           // if checkActivities returns false
     e.preventDefault();                                               // prevent default submit behavior
     activitiesField.firstElementChild.style.display = 'inline-block'; // show alert
-  }
+  };
   if (!checkCreditCard()) {
     e.preventDefault();
-  }
+  };
+
+  console.log('clicked');
   
   // call validation functions on submit event
   checkName();
