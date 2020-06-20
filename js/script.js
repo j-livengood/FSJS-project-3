@@ -297,6 +297,9 @@ form.addEventListener('submit', (e) => {                              // listen 
     e.preventDefault();                                               // prevent default submit behavior
     activitiesField.firstElementChild.style.display = 'inline-block'; // show alert
   }
+  if (!checkCreditCard()) {
+    e.preventDefault();
+  }
   
   // call validation functions on submit event
   checkName();
