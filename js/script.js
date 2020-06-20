@@ -42,6 +42,7 @@ window.onload = () => nameField.focus();      // upon window load, set focus on 
 otherTitleLabel.style.display = 'none';       // hide other title
 otherTitleField.style.display = 'none';       // hide other title field
 themeOptions.firstElementChild.hidden = true; // hide 'select theme' option
+colorOptions.hidden = true;                   // hide color options
 let total = 0;                                // set total to zero
 activitiesField.appendChild(totalCost);       // append total cost to activities field
 totalCost.textContent = `Total: $${total}`;   // fill total cost text
@@ -191,6 +192,7 @@ themeOptions.addEventListener('change', (e) => {                    // add chang
   colorLabel.textContent = 'Color:';                          // change color label text
   if (designSelect === themeOptions) {                        // if target is theme menu
     if (designSelect.value !== 'Select Theme') {              // if value is NOT 'Select Theme'
+      colorOptions.hidden = false;                            // show color options
       shirtBox.previousElementSibling.style.display = 'none'; // hide alert
       themeOptions.style.borderColor = '';                    // remove border color
     }
