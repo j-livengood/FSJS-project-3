@@ -25,39 +25,42 @@ const totalCost = document.createElement('h3');                           // cre
 const paymentSelect = document.getElementById('payment');                 // grab payment select
 const paymentOptions = paymentSelect.children;                            // grab payment options
 const creditCard = document.getElementById('credit-card');                // grab credit card div
+const ccNumber = document.getElementById('cc-num');                       // grab cc number input
+const zipCode = document.getElementById('zip');                           // grab zip code input
+const cvv = document.getElementById('cvv');                               // grab cvv number input
 const paypal = document.getElementById('paypal');                         // grab paypal div
 const bitcoin = document.getElementById('bitcoin');                       // grab bitcoin div
 const submit = document.querySelector('button[type = "submit"');          // grab submit button
-
+  // ----- regex patterns for payment validation ----- //
+const ccPatt = /^[0-9]{13,16}$/;                                          // credit card number regex pattern for 13-16 digits
+const zipPatt = /^[0-9]{5}$/;                                             // zip code regex pattern for 5 digits
+const cvvPatt = /^[0-9]{3}$/;                                             // cvv number regex pattern for 3 digits
 
 
 // ========== INITIAL STATES ========== //
-window.onload = () => nameField.focus();    // upon window load, set focus on name field
-otherTitleLabel.style.display = 'none';     // hide other title
-otherTitleField.style.display = 'none';     // hide other title field
-let total = 0;                              // set total to zero
-activitiesField.appendChild(totalCost);     // append total cost to activities field
-totalCost.textContent = `Total: $${total}`; // fill total cost text
-paymentOptions[0].hidden = true;            // hide select payment method option
-paypal.style.display = 'none';              // hide paypal div
-bitcoin.style.display = 'none';             // hide bitcoin div
+window.onload = () => nameField.focus();      // upon window load, set focus on name field
+otherTitleLabel.style.display = 'none';       // hide other title
+otherTitleField.style.display = 'none';       // hide other title field
+themeOptions.firstElementChild.hidden = true; // hide 'select theme' option
+let total = 0;                                // set total to zero
+activitiesField.appendChild(totalCost);       // append total cost to activities field
+totalCost.textContent = `Total: $${total}`;   // fill total cost text
+paymentOptions[0].hidden = true;              // hide select payment method option
+paymentSelect.value = 'credit card';          // set initial payment option to credit card
+paypal.style.display = 'none';                // hide paypal div
+bitcoin.style.display = 'none';               // hide bitcoin div
 
 
 
 // ========== LOOPS ========== //
 for (let i = 0; i < colorOptionElements.length; i++) { // disable option list items
-  colorOptionElements[i].disabled = true;
-
-  if (i <= 2) {
+  colorOptionElements[i].disabled = true;              // disable all color options
+  if (i <= 2) {                                        // if i matches first 3 elements in colorOptionElements array
     colorOptionElements[i].classList.add('puns');      // add puns class
-  } else {
+  } else {                                             // else
     colorOptionElements[i].classList.add('hearts');    // add hearts class
   }
 }
-
-
-
-// ========== CONDITIONALS ========== //
 
 
 
@@ -121,6 +124,50 @@ const checkActivities = () => {                 // check activities function
   return false;                                 // else, return false
 }
 
+const checkCcNumber = () => {
+  if (ccPatt.test(parseInt(ccNumber.value))) {                // if cc number passes cc regex
+    ccNumber.previousElementSibling.style.display = 'none';   // hide alert
+    ccNumber.style.borderColor = 'rgb(111, 157, 220)';        // set cc input borderColor to initial color
+    return true;                                              // return true
+  } else {                                                    // else
+    ccNumber.previousElementSibling.style.display = 'inline'; // show alert
+    ccNumber.style.borderColor = 'red';                       // set cc input borderColor to red
+    return false;                                             // return false
+  }
+}
+
+const checkZipCode = () => {
+  if (zipPatt.test(parseInt(zipCode.value))) {               // if zip code passes zip regex
+    zipCode.previousElementSibling.style.display = 'none';   // hide alert
+    zipCode.style.borderColor = 'rgb(111, 157, 220)';        // set zip input borderColor to initial color
+    return true;                                             // return true
+  } else {                                                   // else
+    zipCode.previousElementSibling.style.display = 'inline'; // show alert
+    zipCode.style.borderColor = 'red';                       // set zip input borderColor to red
+    return false;                                            // return false
+  }
+}
+
+const checkCvv = () => {
+  if (cvvPatt.test(parseInt(cvv.value))) {               // if cvv number passes cvv regex
+    cvv.previousElementSibling.style.display = 'none';   // hide alert
+    cvv.style.borderColor = 'rgb(111, 157, 220)';        // set cvv input borderColor to initial color
+    return true;                                         // return true
+  } else {                                               // else
+    cvv.previousElementSibling.style.display = 'inline'; // show alert
+    cvv.style.borderColor = 'red';                       // set cvv input borderColor to red
+    return false;                                        // return false
+  }
+}
+
+const checkCreditCard = () => {                // check credit card number function
+  if (paymentSelect.value === 'credit card') { // if menu value is 'credit card'
+    checkCcNumber();                           // check cc number
+    checkZipCode();                            // check zip code
+    checkCvv();                                // check cvv
+  }
+}
+
 
 
 // ========== EVENT LISTENERS ========== //
@@ -137,7 +184,7 @@ window.addEventListener('change', (e) => {    // add change listen to title sele
   }
 });
 
-window.addEventListener('change', (e) => {                    // add change listen to theme select field
+themeOptions.addEventListener('change', (e) => {                    // add change listen to theme select field
   const designSelect = e.target;                              // event target
   const puns = document.getElementsByClassName('puns');       // grab puns
   const hearts = document.getElementsByClassName('hearts');   // grab hearts
@@ -198,16 +245,19 @@ window.addEventListener('change', (e) => {  // add change listen to payment sele
         creditCard.style.display = '';      // show credit card
         paypal.style.display = 'none';      // hide paypal
         bitcoin.style.display = 'none';     // hide bitcoin
+        paymentSelect.previousElementSibling.style.display = 'none';
         break;
       case 'paypal':                        // case paypal
         creditCard.style.display = 'none';  // hide credit card
         paypal.style.display = '';          // show paypal
         bitcoin.style.display = 'none';     // hide bitcoin
+        paymentSelect.previousElementSibling.style.display = 'none';
         break;
       case 'bitcoin':                       // case bitcoin
         creditCard.style.display = 'none';  // hide credit card
         paypal.style.display = 'none';      // hide paypal
         bitcoin.style.display = '';         // show bitcoin
+        paymentSelect.previousElementSibling.style.display = 'none';
         break;
     }
   }
@@ -253,6 +303,7 @@ form.addEventListener('submit', (e) => {                              // listen 
   checkEmail();
   checkShirtTheme();
   checkActivities();
+  checkCreditCard();
 })
 
 // call dynamic createAlert function to add hidden alerts to page, passing in appropriate args for each
@@ -260,3 +311,7 @@ createAlert('Please enter your name.', 'red', 'none', nameLabel, 'afterend');
 createAlert('Please enter a valid email.', 'red', 'none', emailLabel, 'afterend');
 createAlert('Please choose a T-shirt.', 'red', 'none', shirtBox, 'beforebegin');
 createAlert('Please choose your activities.', 'red', 'none', activitiesField.firstElementChild, 'beforebegin');
+createAlert('Please select a payment method.', 'red', 'none', paymentSelect, 'beforebegin');
+createAlert('Please enter a valid credit card number.', 'red', 'none', ccNumber, 'beforebegin');
+createAlert('Please enter a valid zip code.', 'red', 'none', zipCode, 'beforebegin');
+createAlert('Please enter a valid cvv.', 'red', 'none', cvv, 'beforebegin');
