@@ -92,16 +92,22 @@ const checkName = () => {                               // check name function
   }
 }
 
-const checkEmail = () => {                               // check email function
-  const emailValue = emailField.value;                   // grab value in email input
-  const atIndex = emailValue.indexOf('@');               // grab index of '@'
-  const dotIndex = emailValue.lastIndexOf('.');          // grab last index of '.'
-  if (atIndex > 1 && dotIndex > atIndex) {               // if index of '@' larger than 1 AND index of '.' greater than index of '@'
-    emailField.style.borderColor = 'rgb(111, 157, 220)'; // set border color to original state
-    return true;                                         // return true
-  } else {                                               // else
-    emailField.style.borderColor = 'red';                // set border color to red
-    return false;                                        // return false
+const checkEmail = () => {                                                                // check email function
+  const emailValue = emailField.value;                                                    // grab value in email input
+  const atIndex = emailValue.indexOf('@');                                                // grab index of '@'
+  const dotIndex = emailValue.lastIndexOf('.');                                           // grab last index of '.'
+  if (emailValue.length === 0) {                                                          // if value is 0
+    emailField.previousElementSibling.textContent = 'Please enter your email.';           // change text content of alert message
+  } else {                                                                                // else
+    if (atIndex > 1 && dotIndex > atIndex) {                                              // if index of '@' larger than 1 AND
+                                                                                            // index of '.' greater than index of '@'
+    emailField.style.borderColor = 'rgb(111, 157, 220)';                                  // set border color to original state
+    return true;                                                                          // return true
+  } else {                                                                                // else
+    emailField.previousElementSibling.textContent = 'Please enter a valid email address.' // change text content of alert message
+    emailField.style.borderColor = 'red';                                                 // set border color to red
+    return false;                                                                         // return false
+  }
   }
 }
 
@@ -169,6 +175,10 @@ const checkCreditCard = () => {                // check credit card number funct
   }
 }
 
+const fadeIn = (el) => {
+
+}
+
 
 
 // ========== EVENT LISTENERS ========== //
@@ -185,7 +195,7 @@ window.addEventListener('change', (e) => {    // add change listen to title sele
   }
 });
 
-themeOptions.addEventListener('change', (e) => {                    // add change listen to theme select field
+themeOptions.addEventListener('change', (e) => {              // add change listen to theme select field
   const designSelect = e.target;                              // event target
   const puns = document.getElementsByClassName('puns');       // grab puns
   const hearts = document.getElementsByClassName('hearts');   // grab hearts
@@ -265,12 +275,12 @@ window.addEventListener('change', (e) => {  // add change listen to payment sele
   }
 });
 
-['focusout', 'blur'].forEach(event => {                      // dynamically add focusout and blur even listeners
-  nameField.addEventListener(event, () => {                  // listen to name field
-    if (checkName()) {                                       // if checkName returns true
-      nameLabel.nextElementSibling.style.display = 'none';   // hide alert
-    } else {                                                 // else
-      nameLabel.nextElementSibling.style.display = 'inline'; // show alert
+['focusin', 'focusout', 'blur', 'keydown'].forEach(event => { // dynamically add focusout and blur even listeners
+  nameField.addEventListener(event, () => {                   // listen to name field
+    if (checkName()) {                                        // if checkName returns true
+      nameLabel.nextElementSibling.style.display = 'none';    // hide alert
+    } else {                                                  // else
+      nameLabel.nextElementSibling.style.display = 'inline';  // show alert
     }
   });
   emailField.addEventListener(event, () => {                  // listen to email field
